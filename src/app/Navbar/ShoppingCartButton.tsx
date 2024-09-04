@@ -36,7 +36,7 @@ const ShoppingCartButton = ({ cart }: ShoppingCartButtonProps) => {
             Subtotal: {formatPrice(cart?.subtotal || 0)}
           </span>
           <Link
-            href="/"
+            href="/cart"
             className="btn btn-primary btn-block"
             onClick={closeDropdown}
           >
