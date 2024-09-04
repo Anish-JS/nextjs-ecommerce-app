@@ -24,9 +24,12 @@ const addProduct = async (formdata: FormData) => {
   if (!name || !description || !imageUrl || !price) {
     throw new Error("Missing required fields");
   }
-  await db.product.create({
-    data: { name, description, imageUrl, price },
-  });
+  for (let i = 0; i < 20; i++) {
+    await db.product.create({
+      data: { name, description, imageUrl, price },
+    });
+  }
+
   redirect("/");
 };
 
