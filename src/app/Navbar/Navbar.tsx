@@ -27,7 +27,7 @@ const Navbar = async () => {
             className="btn-ghost text-xl normal-case p-1 rounded-md font-bold"
           >
             {/* Image */}
-            Shoemakers' Lane
+            Shoemakers&apos; Lane
           </Link>
         </div>
         <div className="flex-none gap-1">
