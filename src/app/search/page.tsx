@@ -1,9 +1,10 @@
 import ProductCard from "@/components/ProductCard";
 import { db } from "../lib/db/prisma";
 import { Metadata } from "next";
+import PaginationBar from "@/components/PaginationBar";
 
 interface SearchPageProps {
-  searchParams: { query: string };
+  searchParams: { query: string; page: string };
 }
 
 export function generateMetadata({
@@ -15,8 +16,21 @@ export function generateMetadata({
 }
 
 export default async function SearchPage({
-  searchParams: { query },
+  searchParams: { query, page = "1" },
 }: SearchPageProps) {
+  //   const currentPage = parseInt(page);
+  //   const pageSize = 6;
+
+  //   const totalItemCount = await db.product.count({
+  //     where: {
+  //       OR: [
+  //         { name: { contains: query, mode: "insensitive" } },
+  //         { description: { contains: query, mode: "insensitive" } },
+  //       ],
+  //     },
+  //   });
+
+  //   const totalPages = Math.ceil((totalItemCount - 1) / pageSize);
   const products = await db.product.findMany({
     where: {
       OR: [
@@ -25,6 +39,8 @@ export default async function SearchPage({
       ],
     },
     orderBy: { id: "desc" },
+    // skip: (currentPage - 1) * pageSize,
+    // take: pageSize,
   });
 
   if (products.length === 0) {
@@ -32,10 +48,17 @@ export default async function SearchPage({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-      {products.map((product) => (
-        <ProductCard product={product} key={product.id} />
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-2">
+          {products.map((product) => (
+            <ProductCard product={product} key={product.id} />
+          ))}
+        </div>
+        {/* {totalPages > 1 && (
+          <PaginationBar totalPages={totalPages} currentPage={currentPage} />
+        )} */}
+      </div>
+    </>
   );
 }
