@@ -3,7 +3,7 @@ import { db } from "../lib/db/prisma";
 import { NextResponse } from "next/server";
 import FormSubmitButton from "@/components/FormSubmitButton";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 
 export const metadata = {
   title: "Add product - Shoemakers' Lane",
