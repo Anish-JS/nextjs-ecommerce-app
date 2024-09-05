@@ -3,6 +3,17 @@ import { PrismaClient } from "@prisma/client";
 declare global {
   var prisma: PrismaClient | null;
 }
-export const db = globalThis.prisma || new PrismaClient();
+const dbBase = globalThis.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
+export const db = dbBase.$extends({
+  query: {
+    cart: {
+      async update({ args, query }) {
+        args.data = { ...args.data, updatedAt: new Date() };
+        return query(args);
+      },
+    },
+  },
+});
+
+if (process.env.NODE_ENV !== "production") globalThis.prisma = dbBase;

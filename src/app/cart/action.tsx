@@ -9,22 +9,39 @@ const setProductQuantity = async (productId: string, quantity: number) => {
   const articleInCart = cart.items.find((item) => item.productId === productId);
 
   if (quantity === 0) {
-    if (articleInCart)
-      await db.cartItem.delete({
-        where: { id: articleInCart.id },
+    if (articleInCart) {
+      await db.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: {
+            delete: { id: articleInCart.id },
+          },
+        },
       });
+    }
   } else {
     if (articleInCart) {
-      await db.cartItem.update({
-        where: { id: articleInCart.id },
-        data: { quantity: quantity },
+      await db.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: {
+            update: {
+              where: { id: articleInCart.id },
+              data: { quantity },
+            },
+          },
+        },
       });
     } else {
-      await db.cartItem.create({
+      await db.cart.update({
+        where: { id: cart.id },
         data: {
-          cartId: cart.id,
-          productId,
-          quantity: quantity,
+          items: {
+            create: {
+              productId,
+              quantity,
+            },
+          },
         },
       });
     }

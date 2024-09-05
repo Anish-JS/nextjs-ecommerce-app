@@ -9,15 +9,30 @@ const IncrementProductQuantity = async (productId: string) => {
 
   const articleInCart = cart.items.find((item) => item.productId === productId);
   if (articleInCart) {
-    await db.cartItem.update({
-      where: { id: articleInCart.id },
+    await db.cart.update({
+      where: {
+        id: cart.id,
+      },
       data: {
-        quantity: { increment: 1 },
+        items: {
+          update: {
+            where: { id: articleInCart.id },
+            data: { quantity: { increment: 1 } },
+          },
+        },
       },
     });
   } else {
-    await db.cartItem.create({
-      data: { cartId: cart.id, productId, quantity: 1 },
+    await db.cart.update({
+      where: { id: cart.id },
+      data: {
+        items: {
+          create: {
+            productId,
+            quantity: 1,
+          },
+        },
+      },
     });
   }
 
